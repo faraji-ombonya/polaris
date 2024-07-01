@@ -10,3 +10,4 @@ class BookListView(APIView):
         books = Book.objects.all()[:100]
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
+

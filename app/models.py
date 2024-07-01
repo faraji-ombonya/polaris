@@ -1,5 +1,6 @@
 from django.db import models
-from pgvector.django import VectorField
+from pgvector.django import VectorField, HnswIndex
+
 
 # Create your models here.
 class Book(models.Model):
@@ -15,3 +16,13 @@ class Book(models.Model):
         blank = True,
     )
     
+    class Meta:
+        indexes = [
+            HnswIndex(
+                name="embeddings_index",
+                fields = ["embeddings"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            )
+        ]
