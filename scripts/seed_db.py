@@ -16,6 +16,8 @@ if __name__ == "__main__":
     path = os.path.join(MAIN_DIR, "BooksDatasetClean.csv")
     dataset = pd.read_csv(path)
 
+    dataset = dataset.sample(n=10000)
+
     dataset = dataset.drop(
         columns=[
             "Price Starting With ($)", 
