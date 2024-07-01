@@ -7,6 +7,7 @@ class Book(models.Model):
     author = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     publisher = models.TextField(null=True, blank=True)
+    category = models.TextField(null=True, blank=True)
     embeddings = VectorField(
         dimensions = 100,
         help_text= "Book embeddings",

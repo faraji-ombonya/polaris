@@ -7,6 +7,6 @@ from rest_framework import status
 
 class BookListView(APIView):
     def get(self, request, format=None):
-        books = Book.objects.all()
+        books = Book.objects.all()[:100]
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
