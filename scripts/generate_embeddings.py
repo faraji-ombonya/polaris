@@ -25,16 +25,18 @@ if __name__ == "__main__":
 
         words = [word for word in sentence.split()]
 
-        valid_words = [vword for vword in words if vword in model.wv]
+        print(words)
 
-        valid_words_embeddings = np.array([model.wv[word] for word in valid_words])
+        # valid_words = [vword for vword in words if vword in model.wv]
 
-        if valid_words_embeddings.size > 0:
-            averaged_embeddings = np.mean(valid_words_embeddings, axis=0)
-        else:
-            averaged_embeddings = np.zeros(model.vector_size)
+        # valid_words_embeddings = np.array([model.wv[word] for word in valid_words])
 
-        book.embeddings = averaged_embeddings
-        book.save()
+        # if valid_words_embeddings.size > 0:
+        #     averaged_embeddings = np.mean(valid_words_embeddings, axis=0)
+        # else:
+        #     averaged_embeddings = np.zeros(model.vector_size)
 
-        print(averaged_embeddings)    
+        # book.embeddings = averaged_embeddings
+        # book.save()
+
+        # print(averaged_embeddings)    
