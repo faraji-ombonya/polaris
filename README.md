@@ -1,6 +1,6 @@
 # Library Search Engine
 
-A library API that implements semantic vector search. Uses a Word2Vec model to generate embeddings.
+A library API that implements semantic vector search.
 
 ## Languages and Frameworks
 
@@ -12,4 +12,4 @@ A library API that implements semantic vector search. Uses a Word2Vec model to g
 
 - Relational database management wiht **PostgreSQL**
 - Using **pg vector** to store word embeddings as vectors in a PostgreSQL database.
-
+- Using **Word2Vec** model to generate word embeddings.
