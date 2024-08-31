@@ -41,9 +41,9 @@ class BookListView(APIView):
 
         sentence = s
         sentence = re.sub("[^a-zA-Z]", " ", sentence)
-        words = [word.strip().lower() for word in sentence.split()]
-        valid_words = [vword for vword in words if vword in model.wv]
-        embeddings = np.array([model.wv[word] for word in valid_words])
+        tokens = tokenizer.tokenize(sentence) 
+        valid_tokens = [token for token in tokens if token in model.wv]
+        embeddings = np.array([model.wv[token] for token in valid_tokens])
         average_embeddings = (
             np.mean(embeddings, axis=0)
             if embeddings.size > 0
