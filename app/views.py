@@ -50,10 +50,6 @@ class BookListView(APIView):
             else np.zeros(model.vector_size)
         )
 
-        books = books.annotate(
-            distance=CosineDistance("embeddings", average_embeddings)
-        ).order_by("distance")[:5]
-
         # Cosine distance
         books = (
             Book.objects.annotate(
