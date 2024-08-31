@@ -1,6 +1,7 @@
 # Library Search Engine
 
-A library API that implements semantic vector search.
+A Djangi API that implements semantic vector search to power a library
+search engine.
 
 ## Languages and Frameworks
 
@@ -10,6 +11,11 @@ A library API that implements semantic vector search.
 
 ## Skills
 
-- Relational database management wiht **PostgreSQL**
-- Using **pg vector** to store word embeddings as vectors in a PostgreSQL database.
+- Natural Language Processing with **Word2Vec**.
 - Using **Word2Vec** model to generate word embeddings.
+- Using **BertTokenizer** to tokenize sentences.
+- Using **pg vector** to store word embeddings as vectors in a PostgreSQL database.
+- Relational database management with **PostgreSQL**
+- Developing RESTful APIs with **Django**.
+- Scripting with **Python**.
+- Using **Pandas** to efficiently process datasets.
