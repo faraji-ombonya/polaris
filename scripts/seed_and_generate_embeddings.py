@@ -54,7 +54,7 @@ def books():
         description = row["Description"]
         category = row["Category"]
         publisher = row["Publisher"]
-        
+
         sentence = f"{title} {authors} {description} {category} {publisher}"
         sentence = re.sub("[^a-zA-Z0-9]", " ", sentence).strip().lower()
         tokens = [token for token in tokenizer.tokenize(sentence)]
@@ -78,6 +78,7 @@ def books():
 
 if __name__ == "__main__":
     start_time = time.time()
+    Book.objects.all().delete()
     Book.objects.bulk_create(
         [Book(**book) for book in books()], ignore_conflicts=True, batch_size=300
     )
