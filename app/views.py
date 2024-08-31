@@ -3,6 +3,7 @@ import re
 import numpy as np
 
 from gensim.models import Word2Vec
+from transformers import BertTokenizer
 
 from django.conf import settings
 
@@ -13,41 +14,64 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from pgvector.django import CosineDistance
-from app.models import Book
+
+path = os.path.join(settings.BASE_DIR, "word2vec.model")
+model = Word2Vec.load(path)
+tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
 
 class BookListView(APIView):
     def get(self, request, format=None):
+        s = request.GET.get("s")
+        page = int(request.GET.get("page", 1))
+        per_page = int(request.GET.get("per_page", 20))
+        distance = float(request.GET.get("distance", 0.5))
+        offset = (page - 1) * per_page
+        limit = offset + per_page
         books = Book.objects.all()
 
-        s = request.GET.get("s")
+        if not s:
+            response = {
+                "count": 0,
+                "page": page,
+                "per_page": per_page,
+                "results": [],
+            }
+            return Response(response, status=200)
 
-        if s:
+        sentence = s
+        sentence = re.sub("[^a-zA-Z]", " ", sentence)
+        words = [word.strip().lower() for word in sentence.split()]
+        valid_words = [vword for vword in words if vword in model.wv]
+        embeddings = np.array([model.wv[word] for word in valid_words])
+        average_embeddings = (
+            np.mean(embeddings, axis=0)
+            if embeddings.size > 0
+            else np.zeros(model.vector_size)
+        )
 
-            path = os.path.join(settings.BASE_DIR, "word2vec.model")
-            model = Word2Vec.load(path)
-            print(model.wv.most_similar("book"))
+        books = books.annotate(
+            distance=CosineDistance("embeddings", average_embeddings)
+        ).order_by("distance")[:5]
 
-            sentence = s  
-            sentence = re.sub('[^a-zA-Z]', ' ', sentence)
+        # Cosine distance
+        books = (
+            Book.objects.annotate(
+                distance=CosineDistance("embeddings", average_embeddings)
+            )
+            .order_by("distance")
+            .filter(distance__lte=distance)
+        )
 
-            words = [word for word in sentence.split()]
+        # This is a hack that makes sure the whole queryset is evaluated
+        # DO NOT DELETE, untill a better solution is found
+        len(books)
 
-            valid_words = [vword for vword in words if vword in model.wv]
-
-            valid_words_embeddings = np.array([model.wv[word] for word in valid_words])
-
-            if valid_words_embeddings.size > 0:
-                averaged_embeddings = np.mean(valid_words_embeddings, axis=0)
-            else:
-                averaged_embeddings = np.zeros(model.vector_size)
-
-            books = books.annotate(
-                distance=CosineDistance("embeddings", averaged_embeddings)
-            ).order_by("distance")[:5]
-        else:
-            books = books[:2]
-
-
-        serializer = BookSerializer(books, many=True)
-        return Response(serializer.data)
-
+        count = books.count()
+        response = {
+            "count": count,
+            "page": page,
+            "per_page": per_page,
+            "results": BookSerializer(books[offset:limit], many=True).data,
+        }
+        return Response(response, status=status.HTTP_200_OK)
