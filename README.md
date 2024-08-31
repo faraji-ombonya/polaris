@@ -1,6 +1,6 @@
 # Library Search Engine
 
-A Djangi API that implements semantic vector search to power a library
+A Django API that implements semantic vector search to power a library
 search engine.
 
 ## Languages and Frameworks
