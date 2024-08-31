@@ -33,7 +33,7 @@ if __name__ == "__main__":
         category = row["Category"]
         publisher = row["Publisher"]
         text = f"{title} {authors} {description} {category} {publisher}"
-        text = re.sub("[^a-zA-Z0-9]", " ", text).lower().strip()
+        text = re.sub("[^a-zA-Z0-9]", " ", text)
         texts.append(text)
 
     sentences = [tokenizer.tokenize(line) for line in texts]

@@ -56,8 +56,8 @@ def books():
         publisher = row["Publisher"]
 
         sentence = f"{title} {authors} {description} {category} {publisher}"
-        sentence = re.sub("[^a-zA-Z0-9]", " ", sentence).strip().lower()
-        tokens = [token for token in tokenizer.tokenize(sentence)]
+        sentence = re.sub("[^a-zA-Z0-9]", " ", sentence)
+        tokens = tokenizer.tokenize(sentence)
         valid_tokens = [token for token in tokens if token in model.wv]
         embeddings = np.array([model.wv[token] for token in valid_tokens])
         average_embeddings = (
