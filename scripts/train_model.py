@@ -39,7 +39,7 @@ if __name__ == "__main__":
     sentences = [tokenizer.tokenize(line) for line in texts]
 
     w2v = Word2Vec(
-        sentences, vector_size=100, window=5, workers=3, epochs=10, min_count=4
+        sentences, vector_size=100, window=5, workers=3, epochs=1, min_count=4
     )
     model_name = "word2vec.model"
     path = os.path.join(MAIN_DIR, model_name)
